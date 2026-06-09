@@ -298,8 +298,10 @@
     function fillDateSelects() {
       const mSel = document.getElementById('dueMonth');
       const dSel = document.getElementById('dueDay');
+      const curMonth = new Date().getMonth() + 1;
       for (let i = 1; i <= 12; i++) mSel.insertAdjacentHTML('beforeend', `<option value="${i}">${i}월</option>`);
       for (let i = 1; i <= 31; i++) dSel.insertAdjacentHTML('beforeend', `<option value="${i}">${i}일</option>`);
+      mSel.value = curMonth; // 이번 달 자동 선택
     }
 
     function addTodo() {
@@ -314,7 +316,7 @@
         created: new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
       });
       input.value = '';
-      document.getElementById('dueMonth').value = '';
+      document.getElementById('dueMonth').value = new Date().getMonth() + 1;
       document.getElementById('dueDay').value = '';
       saveTodos(); render();
     }
