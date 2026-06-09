@@ -234,6 +234,7 @@
         <option value="공익제보">공익제보</option>
         <option value="국민신문고">국민신문고</option>
         <option value="정보공개청구">정보공개청구</option>
+        <option value="기타">기타</option>
       </select>
       <select id="prioritySelect" class="sel">
         <option value="low">낮음</option>
@@ -273,7 +274,7 @@
     let todos = JSON.parse(localStorage.getItem('todos') || '[]');
     let view = localStorage.getItem('view') || 'category';
 
-    const CATEGORIES = ['대학정보공시','법인감사','고등교육통계','공익제보','국민신문고','정보공개청구'];
+    const CATEGORIES = ['대학정보공시','법인감사','고등교육통계','공익제보','국민신문고','정보공개청구','기타'];
     const PRIO_LABEL = { high: '높음', medium: '보통', low: '낮음' };
     const CHEERS = [
       '잘하고 있어요! 👏','하나 끝! 멋져요 ✨','훌륭해요, 계속 가봐요! 🚀',
