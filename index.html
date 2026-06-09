@@ -224,7 +224,7 @@
 
   <section class="hero">
     <div class="today-date" id="todayDate"></div>
-    <h1>민지님의 오늘의 할일</h1>
+    <h1>민지님의 오늘 할 일</h1>
     <div class="input-row">
       <input id="todoInput" type="text" placeholder="새로운 할 일 입력…" />
       <select id="categorySelect" class="sel">
@@ -240,7 +240,8 @@
         <option value="medium" selected>보통</option>
         <option value="high">높음</option>
       </select>
-      <input id="dueInput" type="date" title="마감기한" />
+      <select id="dueMonth" class="sel" title="마감 월"><option value="">월</option></select>
+      <select id="dueDay" class="sel" title="마감 일"><option value="">일</option></select>
       <button class="btn-primary" onclick="addTodo()">추가</button>
     </div>
   </section>
@@ -282,6 +283,25 @@
 
     function saveTodos() { localStorage.setItem('todos', JSON.stringify(todos)); }
 
+    // 월/일 선택 → YYYY-MM-DD (연도는 자동: 지난 날짜면 내년)
+    function buildDue() {
+      const m = document.getElementById('dueMonth').value;
+      const d = document.getElementById('dueDay').value;
+      if (!m || !d) return '';
+      const now = new Date(); now.setHours(0,0,0,0);
+      let year = now.getFullYear();
+      let dt = new Date(year, m - 1, d);
+      if (dt < now) year += 1;
+      return `${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    function fillDateSelects() {
+      const mSel = document.getElementById('dueMonth');
+      const dSel = document.getElementById('dueDay');
+      for (let i = 1; i <= 12; i++) mSel.insertAdjacentHTML('beforeend', `<option value="${i}">${i}월</option>`);
+      for (let i = 1; i <= 31; i++) dSel.insertAdjacentHTML('beforeend', `<option value="${i}">${i}일</option>`);
+    }
+
     function addTodo() {
       const input = document.getElementById('todoInput');
       const text = input.value.trim();
@@ -290,11 +310,12 @@
         id: Date.now(), text, done: false,
         category: document.getElementById('categorySelect').value,
         priority: document.getElementById('prioritySelect').value,
-        due: document.getElementById('dueInput').value || '',
+        due: buildDue(),
         created: new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
       });
       input.value = '';
-      document.getElementById('dueInput').value = '';
+      document.getElementById('dueMonth').value = '';
+      document.getElementById('dueDay').value = '';
       saveTodos(); render();
     }
 
@@ -456,6 +477,7 @@
 
     document.getElementById('todayDate').textContent =
       new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+    fillDateSelects();
     if (localStorage.getItem('theme') === 'dark') toggleTheme();
     setView(view);
   </script>
